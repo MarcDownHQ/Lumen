@@ -1,6 +1,6 @@
 ---
 name: release
-description: Cut a Lumen release, the whole shebang - docs sweep (CHANGELOG, README, THIRD-PARTY.md, brain/), version bump in lumen/build.gradle.kts, full local gate (release build, lint, coverage floor, shellcheck), [master] chore(release) commit, annotated vX.Y.Z tag, push to Forgejo and sync the GitHub mirror, watch the release workflow until the GitHub release has its signed APK, then copy the release to Forgejo. Use when the user says "cut a release", "release 1.3.0", "ship a version", or "the whole release shebang" in this repository.
+description: Cut a Lumen release, the whole shebang - docs sweep (CHANGELOG, README, THIRD-PARTY.md, brain/), version bump in lumen/build.gradle.kts, full local gate (release build, lint, coverage floor, shellcheck), [master] chore(release) commit, annotated vX.Y.Z tag, push to GitHub, watch the release workflow until the GitHub release has its signed APK. Use when the user says "cut a release", "release 1.3.0", "ship a version", or "the whole release shebang" in this repository.
 ---
 
 # Cutting a Lumen release
@@ -30,8 +30,8 @@ tag (step 5).
   gives. Note whether this run created that worktree; "Done when" depends on
   it. Then `git pull --ff-only` there. Every later command runs from that
   checkout (`$REPO` below).
-- Tree clean, up to date with `origin/master` (Forgejo,
-  `ssh://git@box.arzaroth.com/MarcDownHQ/Lumen.git`). Every branch meant for this
+- Tree clean, up to date with `origin/master` (GitHub,
+  `git@github.com:MarcDownHQ/Lumen.git`). Every branch meant for this
   release is merged.
 - Commits are authored as `gitea@barrut.me`; check `git config user.email`
   before committing.
@@ -107,12 +107,11 @@ explicit yes. Then:
 git commit -am "[master] chore(release): X.Y.Z"
 git tag -a vX.Y.Z -m vX.Y.Z
 git push origin master vX.Y.Z
-smith api -X POST repos/MarcDownHQ/Lumen/push_mirrors-sync
 ```
 
 The subject alone is the house style (`git log -1 --format=%B v<last>`); end
-the message with the Co-Authored-By trailer. The mirror sync pushes master and
-the tag to github.com/MarcDownHQ/Lumen, which is what triggers the workflow.
+the message with the Co-Authored-By trailer. Pushing the tag is what triggers
+the workflow.
 
 ## 6. Watch
 
@@ -136,21 +135,9 @@ CI config or a secret was wrong, re-run the failed run
 (`gh run rerun <id> -R MarcDownHQ/Lumen`); if code changed, cut the next patch
 instead of moving a published tag.
 
-## 7. Copy the release to Forgejo
-
-```bash
-d=$(mktemp -d)
-gh release download vX.Y.Z -R MarcDownHQ/Lumen -D "$d"
-scripts/changelog.sh X.Y.Z | python3 -c 'import json, sys; print(json.dumps({"tag_name": "vX.Y.Z", "name": "Lumen X.Y.Z", "body": sys.stdin.read()}))' \
-  | smith api -X POST repos/MarcDownHQ/Lumen/releases --input -
-smith release upload vX.Y.Z "$d/lumen-X.Y.Z.apk" -R MarcDownHQ/Lumen
-rm -rf "$d"
-```
-
 ## Done when
 
-The tag is on Forgejo and GitHub, the GitHub release has `lumen-X.Y.Z.apk`
-signed with the release key and its body is the changelog section, and the
-Forgejo release carries the same APK and notes. Report the version, the
+The tag is on GitHub, and the GitHub release has `lumen-X.Y.Z.apk` signed with
+the release key and its body is the changelog section. Report the version, the
 GitHub release URL and a one-line theme; a TV picks it up from Advanced
 settings. Remove the master worktree only if this run created it.

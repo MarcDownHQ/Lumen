@@ -1,6 +1,6 @@
 ---
 name: feature-treatment
-description: Ship a finished Lumen feature branch the full way - rebase onto master, run a max-effort multi-agent review with Lumen's lenses (TV safety, GPU budget on a weak TV, self-update integrity, correctness, reuse, tests), fix everything confirmed as new layers, update the brain, pass the full gate (release build, lint, coverage floor, shellcheck), fast-forward master keeping the layers, push to Forgejo and sync the GitHub mirror, cut a release, and remove the worktree. Use when the user says "feature treatment", "treat this branch", "review and merge this feature", or names a worktree or branch to ship.
+description: Ship a finished Lumen feature branch the full way - rebase onto master, run a max-effort multi-agent review with Lumen's lenses (TV safety, GPU budget on a weak TV, self-update integrity, correctness, reuse, tests), fix everything confirmed as new layers, update the brain, pass the full gate (release build, lint, coverage floor, shellcheck), fast-forward master keeping the layers, push to GitHub, cut a release, and remove the worktree. Use when the user says "feature treatment", "treat this branch", "review and merge this feature", or names a worktree or branch to ship.
 ---
 
 # Feature treatment
@@ -26,8 +26,8 @@ pinned toolchain (`mise.toml`: temurin-17, the Android SDK, shellcheck).
 ## 1. Rebase onto master
 
 First decide whether history may be rewritten. If the branch is already pushed
-to `origin` (Forgejo, `git ls-remote origin <branch>`) and someone has
-reviewed it there (`smith pr list -R MarcDownHQ/Lumen`), do not rebase: merge
+to `origin` (GitHub, `git ls-remote origin <branch>`) and someone has
+reviewed it there (`gh pr list -R MarcDownHQ/Lumen`), do not rebase: merge
 `origin/master` in, or ask. Otherwise:
 
 ```bash
@@ -156,12 +156,10 @@ says it is free and its tree is clean; ask otherwise):
 git -C "$MAIN" switch master && git -C "$MAIN" pull --ff-only
 git -C "$MAIN" merge --ff-only <branch>
 git -C "$MAIN" push origin master
-smith api -X POST repos/MarcDownHQ/Lumen/push_mirrors-sync
 ```
 
-Forgejo (`origin`) is the source of truth; the sync pushes master to
-github.com/MarcDownHQ/Lumen, where `.github/workflows/ci.yml` runs on the push.
-Watch it green:
+GitHub (`origin`) is the source of truth; `.github/workflows/ci.yml` runs on the
+push. Watch it green:
 
 ```bash
 gh run list -R MarcDownHQ/Lumen --workflow ci.yml -L 1

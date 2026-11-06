@@ -12,7 +12,7 @@ picture, then jump to the layer you need. Back to the root map: [../BRAIN.md](..
 | [gpu-budget.md](gpu-budget.md) | Frame costs per layer on the TV, the measuring method, the rules | gfxinfo, framestats, GpuCompleted, CLIENT composition, perf.py |
 | [menus.md](menus.md) | The glass dropdown: pages, rows, questions, navigation, in-place refresh | Menu, Page, Row, swap, showing, LumenSettings |
 | [tv-scripts.md](tv-scripts.md) | backup, disable, install, restore; the Home guard; what must never be disabled | install.sh, restore.sh, disable.sh, launcherx, setupwraith |
-| [distribution.md](distribution.md) | Gradle, signing, CI, the release workflow, Forgejo copy, the updater | build.gradle.kts, keystore.properties, release.yml, Updater |
+| [distribution.md](distribution.md) | Gradle, signing, CI, the release workflow, the updater | build.gradle.kts, keystore.properties, release.yml, Updater |
 | [testing.md](testing.md) | Robolectric with native graphics, Wall, Robo helpers, coverage floor | Robo, Wall, coverage.sh, Releases, JaCoCo |
 
 ## How to use this folder

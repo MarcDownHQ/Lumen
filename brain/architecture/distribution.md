@@ -21,8 +21,8 @@ accepts an update signed with the same key as the installed Lumen.
 - `.github/workflows/release.yml` on a `vX.Y.Z` tag: checks the tag is on master, matches the
   version and has changelog notes (`scripts/changelog.sh`), runs the gate, builds the APK signed from
   the repo secrets and publishes the GitHub release with `lumen-X.Y.Z.apk`.
-- Forgejo is the source of truth and push-mirrors to GitHub; the release and its APK are then copied
-  to the Forgejo release. The project's `release` skill walks the whole pipeline.
+- GitHub (`MarcDownHQ/Lumen`) is the source of truth; `git.arzaroth.com` keeps a read-only pull mirror
+  as a backup. The project's `release` skill walks the whole pipeline.
 
 ## Updates on the TV
 

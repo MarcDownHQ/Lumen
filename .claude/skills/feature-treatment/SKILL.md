@@ -27,7 +27,7 @@ pinned toolchain (`mise.toml`: temurin-17, the Android SDK, shellcheck).
 
 First decide whether history may be rewritten. If the branch is already pushed
 to `origin` (Forgejo, `git ls-remote origin <branch>`) and someone has
-reviewed it there (`smith pr list -R Arzaroth/Lumen`), do not rebase: merge
+reviewed it there (`smith pr list -R MarcDownHQ/Lumen`), do not rebase: merge
 `origin/master` in, or ask. Otherwise:
 
 ```bash
@@ -156,16 +156,16 @@ says it is free and its tree is clean; ask otherwise):
 git -C "$MAIN" switch master && git -C "$MAIN" pull --ff-only
 git -C "$MAIN" merge --ff-only <branch>
 git -C "$MAIN" push origin master
-smith api -X POST repos/Arzaroth/Lumen/push_mirrors-sync
+smith api -X POST repos/MarcDownHQ/Lumen/push_mirrors-sync
 ```
 
 Forgejo (`origin`) is the source of truth; the sync pushes master to
-github.com/Arzaroth/Lumen, where `.github/workflows/ci.yml` runs on the push.
+github.com/MarcDownHQ/Lumen, where `.github/workflows/ci.yml` runs on the push.
 Watch it green:
 
 ```bash
-gh run list -R Arzaroth/Lumen --workflow ci.yml -L 1
-gh run watch -R Arzaroth/Lumen <id> --exit-status
+gh run list -R MarcDownHQ/Lumen --workflow ci.yml -L 1
+gh run watch -R MarcDownHQ/Lumen <id> --exit-status
 ```
 
 ## 7. Release

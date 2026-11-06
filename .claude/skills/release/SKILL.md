@@ -31,7 +31,7 @@ tag (step 5).
   it. Then `git pull --ff-only` there. Every later command runs from that
   checkout (`$REPO` below).
 - Tree clean, up to date with `origin/master` (Forgejo,
-  `ssh://git@box.arzaroth.com/Arzaroth/Lumen.git`). Every branch meant for this
+  `ssh://git@box.arzaroth.com/MarcDownHQ/Lumen.git`). Every branch meant for this
   release is merged.
 - Commits are authored as `gitea@barrut.me`; check `git config user.email`
   before committing.
@@ -74,7 +74,7 @@ shape.
 `CHANGELOG.md`: move the `## [Unreleased]` entries under a new
 `## [X.Y.Z] - YYYY-MM-DD` heading and leave an empty `## [Unreleased]` above
 it. At the bottom, point `[Unreleased]` at `compare/vX.Y.Z...HEAD` and add
-`[X.Y.Z]: https://github.com/Arzaroth/Lumen/compare/v<last>...vX.Y.Z` above
+`[X.Y.Z]: https://github.com/MarcDownHQ/Lumen/compare/v<last>...vX.Y.Z` above
 the previous version's link. Then check the notes come out:
 
 ```bash
@@ -107,12 +107,12 @@ explicit yes. Then:
 git commit -am "[master] chore(release): X.Y.Z"
 git tag -a vX.Y.Z -m vX.Y.Z
 git push origin master vX.Y.Z
-smith api -X POST repos/Arzaroth/Lumen/push_mirrors-sync
+smith api -X POST repos/MarcDownHQ/Lumen/push_mirrors-sync
 ```
 
 The subject alone is the house style (`git log -1 --format=%B v<last>`); end
 the message with the Co-Authored-By trailer. The mirror sync pushes master and
-the tag to github.com/Arzaroth/Lumen, which is what triggers the workflow.
+the tag to github.com/MarcDownHQ/Lumen, which is what triggers the workflow.
 
 ## 6. Watch
 
@@ -126,24 +126,24 @@ Lumen could update to. `publish` creates the GitHub release "Lumen X.Y.Z" with
 `lumen-X.Y.Z.apk` and the changelog notes as its body.
 
 ```bash
-gh run list -R Arzaroth/Lumen --workflow release.yml -L 1
-gh run watch -R Arzaroth/Lumen <id> --exit-status
-gh release view vX.Y.Z -R Arzaroth/Lumen --json assets --jq '.assets[].name'
+gh run list -R MarcDownHQ/Lumen --workflow release.yml -L 1
+gh run watch -R MarcDownHQ/Lumen <id> --exit-status
+gh release view vX.Y.Z -R MarcDownHQ/Lumen --json assets --jq '.assets[].name'
 ```
 
 If the run fails after the tag is out: fix on master in a new commit. If only
 CI config or a secret was wrong, re-run the failed run
-(`gh run rerun <id> -R Arzaroth/Lumen`); if code changed, cut the next patch
+(`gh run rerun <id> -R MarcDownHQ/Lumen`); if code changed, cut the next patch
 instead of moving a published tag.
 
 ## 7. Copy the release to Forgejo
 
 ```bash
 d=$(mktemp -d)
-gh release download vX.Y.Z -R Arzaroth/Lumen -D "$d"
+gh release download vX.Y.Z -R MarcDownHQ/Lumen -D "$d"
 scripts/changelog.sh X.Y.Z | python3 -c 'import json, sys; print(json.dumps({"tag_name": "vX.Y.Z", "name": "Lumen X.Y.Z", "body": sys.stdin.read()}))' \
-  | smith api -X POST repos/Arzaroth/Lumen/releases --input -
-smith release upload vX.Y.Z "$d/lumen-X.Y.Z.apk" -R Arzaroth/Lumen
+  | smith api -X POST repos/MarcDownHQ/Lumen/releases --input -
+smith release upload vX.Y.Z "$d/lumen-X.Y.Z.apk" -R MarcDownHQ/Lumen
 rm -rf "$d"
 ```
 

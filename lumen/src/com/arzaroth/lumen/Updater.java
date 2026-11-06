@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 final class Updater {
     enum State { IDLE, CHECKING, CURRENT, AVAILABLE, BLOCKED, DOWNLOADING, INSTALLING, CONFIRMING, FAILED }
 
-    static String releases = "https://api.github.com/repos/Arzaroth/Lumen/releases/latest";
+    static String releases = "https://api.github.com/repos/MarcDownHQ/Lumen/releases/latest";
     /** How long the downloaded update waits before Android takes Lumen down, so its screen plays out. */
     static long hold = 4000;
 
